@@ -18,8 +18,8 @@ class OktaOAuth(Auth):
         super(OktaOAuth, self).__init__(app)
         okta_bp = make_okta_blueprint(
             base_url=base_url,
-            authorization_url=base_url + '/oauth2/default/v1/authorize',
-            token_url=base_url + '/oauth2/default/v1/token', 
+            authorization_url=base_url + '/oauth2/v1/authorize',
+            token_url=base_url + '/oauth2/v1/token', 
             scope=[
                 "openid",
                 "email",
@@ -34,7 +34,7 @@ class OktaOAuth(Auth):
             return False
 
         try:
-            resp = okta.get("/oauth2/default/v1/userinfo")
+            resp = okta.get("/oauth2/v1/userinfo")
             assert resp.ok, resp.text
 
             session['email'] = resp.json().get('email')
