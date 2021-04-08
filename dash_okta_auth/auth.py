@@ -5,8 +5,9 @@ from six import iteritems, add_metaclass
 
 @add_metaclass(ABCMeta)
 class Auth(object):
-    def __init__(self, app):
+    def __init__(self, app, unprotected_view_functions):
         self.app = app
+        self.unprotected_view_functions = set(unprotected_view_functions)
         self._index_view_name = app.config['routes_pathname_prefix']
         self._overwrite_index()
         self._protect_views()
@@ -22,7 +23,7 @@ class Auth(object):
         # require auth wrapper for all views
         for view_name, view_method in iteritems(
                 self.app.server.view_functions):
-            if view_name != self._index_view_name:
+            if view_name != self._index_view_name and view_name not in self.unprotected_view_functions:
                 self.app.server.view_functions[view_name] = \
                     self.auth_wrapper(view_method)
 

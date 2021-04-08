@@ -23,8 +23,8 @@ okta = LocalProxy(partial(_lookup_app_object, "okta_oauth"))
 
 
 class OktaOAuth(Auth):
-    def __init__(self, app, base_url):
-        super(OktaOAuth, self).__init__(app)
+    def __init__(self, app, unprotected_view_functions, base_url):
+        super(OktaOAuth, self).__init__(app, unprotected_view_functions)
         scope = ["openid", "email", "profile"]
         okta_bp = OAuth2ConsumerBlueprint(
             "okta",
